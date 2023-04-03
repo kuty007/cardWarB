@@ -3,6 +3,7 @@
 #include "sources/player.hpp"
 #include "sources/game.hpp"
 #include "sources/card.hpp"
+
 using namespace std;
 
 TEST_CASE("The amount of cards before starting a game")
@@ -43,8 +44,7 @@ TEST_CASE("Throwing errors from the functions")
     Player p1("Alice");
     Player p2("Bob");
     Game game(p1, p2);
-    for (int i = 0; i < 5; i++)
-    {
+    for (int i = 0; i < 5; i++) {
         game.playTurn();
     }
     CHECK_NOTHROW(game.printLastTurn());
@@ -78,29 +78,29 @@ TEST_CASE("Printing the winner")
     Game game(p1, p2);
     game.playAll();
 
-    if (p1.cardesTaken() == p2.cardesTaken())
-    {
+    if (p1.cardesTaken() == p2.cardesTaken()) {
         CHECK_THROWS(game.printWiner());
-    }
-    else
-    {
+    } else {
         CHECK_NOTHROW(game.printWiner());
     }
 }
 
+
 TEST_CASE("The game ends after at most 26 turns")
 {
-    Player p1("Alice");
-    Player p2("Bob");
-    Game game(p1, p2);
-    bool maxTurns = 26;
-    
-    for (int i = 0 ; i <= 26 ; i++ && p1.stacksize()>=0)
-    {
-        game.playTurn();
+
+
+
+        Player p1("Alice");
+        Player p2("Bob");
+        Game game(p1, p2);
+        bool maxTurns = 26;
+
+        for (int i = 0; i < 26 && p1.stacksize() > 0 && p2.stacksize() > 0; i++) {
+            game.playTurn();
+        }
+        CHECK(maxTurns == 1);
+        CHECK(p1.stacksize() == 0);
+        CHECK(p2.stacksize() == 0);
     }
-    CHECK(maxTurns == 26);
-    CHECK(p1.stacksize() == 0);
-    CHECK(p2.stacksize() == 0);
-}
 
