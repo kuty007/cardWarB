@@ -33,6 +33,12 @@ Value Card::get_value() {
 }
 
 int Card::compare(Card card) {
+    if (_value == ACE && card.get_value() == TWO) {
+        return -1;
+    }
+    if (_value == TWO && card.get_value() == ACE) {
+        return 1;
+    }
     if (_value > card.get_value()) {
         return 1;
     } else if (_value < card.get_value()) {
@@ -43,7 +49,7 @@ int Card::compare(Card card) {
     return 0;
 }
 
-//tosring
+
 std::string Card::toString() {
     std::string value;
     std::string suit;

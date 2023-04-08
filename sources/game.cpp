@@ -46,10 +46,10 @@ void Game::printWiner() {
     } else if (_player1.getCardsWon() < _player2.getCardsWon()) {
         winner = _player2.getName();
     } else {
-        winner = "Drew!";
+        winner = "Draw!";
     }
-    if (winner == "Drew!") {
-        throw std::invalid_argument("Drew!");
+    if (winner == "Draw!") {
+        cout << "The game ended in a draw!" << endl;
     } else {
         cout << winner << " won the game!" << endl;
     }
@@ -77,13 +77,8 @@ void Game::playTurn() {
     }
     Card card1;
     Card card2;
-    try {
-         card1 = _player1.getTopCard();
-         card2 = _player2.getTopCard();
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
-
+    card1 = _player1.getTopCard();
+    card2 = _player2.getTopCard();
     _turns++;
     if (card1.compare(card2) == 1) {
         _player1Wins++;
@@ -113,53 +108,64 @@ void Game::playTurn() {
     }
 }
 
-std::string Game::drewTurn(int totalCards, string log) {
+std::string Game::drewTurn(int totalCards, std::string log) {
     //check if one of the players has less than 2 cards left and if so you can't do a drew turn
-    if (_player1.getCardsLeft() < 2 || _player2.getCardsLeft() < 2) {
+    if (_player1.stacksize() == 0 || _player2.stacksize() == 0) {
+        _player1.setCardsLeft(0);
+        _player2.setCardsLeft(0);
+        _player1.setCardsWon(_player1.getCardsWon() + (totalCards / 2));
+        _player2.setCardsWon(_player2.getCardsWon() + (totalCards / 2));
+        return "";
+    }
+    if (_player1.stacksize() < 2 || _player2.stacksize() < 2) {
+
         _player1.setCardsLeft(0);
         _player2.setCardsLeft(0);
         _player1.removeCard();
         _player2.removeCard();
-        _player1.setCardsWon(_player1.getCardsWon() + totalCards / 2 + 1);
-        _player2.setCardsWon(_player2.getCardsWon() + totalCards / 2 + 1);
-
+        totalCards += 2;
+        _player1.setCardsWon(_player1.getCardsWon() + (totalCards / 2));
+        _player2.setCardsWon(_player2.getCardsWon() + (totalCards / 2));
         return "";
     }
     //dump card from each plyer and then play turn
     //if drew again then dump again and play turn
-    _player1.removeCard();
-    _player2.removeCard();
-    totalCards += 2;
-    Card card1 = _player1.getTopCard();
-    Card card2 = _player2.getTopCard();
-    totalCards += 2;
-    if (card1.compare(card2) == 1) {
-        _player1Wins++;
-        _player1CardsWon += totalCards;
-        _player1.setCardsWon(_player1.getCardsWon() + totalCards);
-        _player1.setCardsLeft(_player1.getCardsLeft() - (totalCards / 2));
-        _player2.setCardsLeft(_player2.getCardsLeft() - (totalCards / 2));
-        log += _player1.getName() + " won the drew with " + card1.toString() + " and " + _player2.getName() +
-               " lost with " + card2.toString();
-        return log;
+    if (_player1.stacksize() >= 2) {
+        _player1.removeCard();
+        _player2.removeCard();
+        totalCards += 2;
+        Card card1 = _player1.getTopCard();
+        Card card2 = _player2.getTopCard();
+        totalCards += 2;
+        if (card1.compare(card2) == 1) {
+            _player1Wins++;
+            _player1CardsWon += totalCards;
+            _player1.setCardsWon(_player1.getCardsWon() + totalCards);
+            _player1.setCardsLeft(_player1.getCardsLeft() - (totalCards / 2));
+            _player2.setCardsLeft(_player2.getCardsLeft() - (totalCards / 2));
+            log += _player1.getName() + " won the drew with " + card1.toString() + " and " + _player2.getName() +
+                   " lost with " + card2.toString();
+            return log;
 
-    } else if (card1.compare(card2) == -1) {
-        _player2Wins++;
-        _player2CardsWon += totalCards;
-        _player2.setCardsWon(_player2.getCardsWon() + totalCards);
-        _player2.setCardsLeft(_player2.getCardsLeft() - (totalCards / 2));
-        _player1.setCardsLeft(_player1.getCardsLeft() - (totalCards / 2));
-        log += _player2.getName() + " won the drew with " + card2.toString() + " and " + _player1.getName() +
-               " lost with " + card1.toString();
-        return log;
-    } else {
-        drews++;
-        log += _player1.getName() + " played " + card1.toString() + " and " + _player2.getName() + " played " +
-               card2.toString() + " Drew!\n";
-        drewTurn(totalCards, log);
+        } else if (card1.compare(card2) == -1) {
+            _player2Wins++;
+            _player2CardsWon += totalCards;
+            _player2.setCardsWon(_player2.getCardsWon() + totalCards);
+            _player2.setCardsLeft(_player2.getCardsLeft() - (totalCards / 2));
+            _player1.setCardsLeft(_player1.getCardsLeft() - (totalCards / 2));
+            log += _player2.getName() + " won the drew with " + card2.toString() + " and " + _player1.getName() +
+                   " lost with " + card1.toString();
+            return log;
+        } else {
+            drews++;
+            log += _player1.getName() + " played " + card1.toString() + " and " + _player2.getName() + " played " +
+                   card2.toString() + " Drew!\n";
+            return drewTurn(totalCards, log);
+        }
     }
-    return drewTurn(totalCards, log);
+    return log;
 }
+
 
 void Game::playAll() {
     while (_player1.stacksize() > 0 && _player2.stacksize() > 0) {
@@ -171,10 +177,13 @@ void Game::printStats() {
     string statsString = "Total turns: " + to_string(_turns) + "\n"
                                                                "Drews: " + to_string(drews) + " turns from " +
                          to_string(getTurns()) + " turns\n"
-                         + _player1.getName() + " Wins: " + to_string(_player1Wins) + " turns from " +
+                         + _player1.getName() + " wins: " + to_string(_player1Wins) + " turns from " +
                          to_string(getTurns()) + " turns\n"
-                         + _player2.getName() + " Wins: " + to_string(_player2Wins) + " turns from " +
+                         + _player1.getName() + " win rate =:" + to_string((float) _player1Wins / getTurns() * 100) +
+                         "\n"
+                         + _player2.getName() + " wins: " + to_string(_player2Wins) + " turns from " +
                          to_string(getTurns()) + " turns\n"
+                         + _player2.getName() + " win rate =:" + to_string((float) _player2Wins / getTurns() * 100)+"\n"
                          + _player1.getName() + " total cards Won: " + to_string(_player1CardsWon) + "\n"
                          + _player2.getName() + " total cards Won: " + to_string(_player2CardsWon) + "\n";
     cout << statsString;

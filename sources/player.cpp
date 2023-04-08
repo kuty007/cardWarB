@@ -94,7 +94,6 @@ void Player::removeCard() {
         return;
     }
 }
-
 class NoCardsLeftException : public std::exception {
 public:
     virtual const char* what() const noexcept {

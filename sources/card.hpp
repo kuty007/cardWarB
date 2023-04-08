@@ -15,7 +15,6 @@ enum Suit {
     SPADES
 };
 enum Value {
-    ACE,
     TWO,
     THREE,
     FOUR,
@@ -27,7 +26,8 @@ enum Value {
     TEN,
     JACK,
     QUEEN,
-    KING
+    KING,
+    ACE
 };
 
 
