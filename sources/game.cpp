@@ -102,7 +102,7 @@ void Game::playTurn() {
         drews++;
         string log =
                 _player1.getName() + " played " + card1.toString() + " and " + _player2.getName() + " played " +
-                card2.toString() + " Drew! ";
+                card2.toString() + " Draw! ";
         log = drewTurn(2, log);
         _log.push_back(log);
     }
@@ -115,10 +115,9 @@ std::string Game::drewTurn(int totalCards, std::string log) {
         _player2.setCardsLeft(0);
         _player1.setCardsWon(_player1.getCardsWon() + (totalCards / 2));
         _player2.setCardsWon(_player2.getCardsWon() + (totalCards / 2));
-        return "";
+        return log;
     }
     if (_player1.stacksize() < 2 || _player2.stacksize() < 2) {
-
         _player1.setCardsLeft(0);
         _player2.setCardsLeft(0);
         _player1.removeCard();
@@ -126,9 +125,9 @@ std::string Game::drewTurn(int totalCards, std::string log) {
         totalCards += 2;
         _player1.setCardsWon(_player1.getCardsWon() + (totalCards / 2));
         _player2.setCardsWon(_player2.getCardsWon() + (totalCards / 2));
-        return "";
+        return log;
     }
-    //dump card from each plyer and then play turn
+    //dump card from each player and then play turn
     //if drew again then dump again and play turn
     if (_player1.stacksize() >= 2) {
         _player1.removeCard();
@@ -143,7 +142,7 @@ std::string Game::drewTurn(int totalCards, std::string log) {
             _player1.setCardsWon(_player1.getCardsWon() + totalCards);
             _player1.setCardsLeft(_player1.getCardsLeft() - (totalCards / 2));
             _player2.setCardsLeft(_player2.getCardsLeft() - (totalCards / 2));
-            log += _player1.getName() + " won the drew with " + card1.toString() + " and " + _player2.getName() +
+            log += _player1.getName() + " won the draw with " + card1.toString() + " and " + _player2.getName() +
                    " lost with " + card2.toString();
             return log;
 
@@ -153,13 +152,13 @@ std::string Game::drewTurn(int totalCards, std::string log) {
             _player2.setCardsWon(_player2.getCardsWon() + totalCards);
             _player2.setCardsLeft(_player2.getCardsLeft() - (totalCards / 2));
             _player1.setCardsLeft(_player1.getCardsLeft() - (totalCards / 2));
-            log += _player2.getName() + " won the drew with " + card2.toString() + " and " + _player1.getName() +
+            log += _player2.getName() + " won the draw with " + card2.toString() + " and " + _player1.getName() +
                    " lost with " + card1.toString();
             return log;
         } else {
             drews++;
             log += _player1.getName() + " played " + card1.toString() + " and " + _player2.getName() + " played " +
-                   card2.toString() + " Drew!\n";
+                   card2.toString() + " Draw!\n";
             return drewTurn(totalCards, log);
         }
     }
@@ -174,16 +173,18 @@ void Game::playAll() {
 }
 
 void Game::printStats() {
-    string statsString = "Total turns: " + to_string(_turns) + "\n"
-                                                               "Drews: " + to_string(drews) + " turns from " +
+    string statsString = "Total turns: " + to_string(_turns) + "\n" +
+                         "Draws: " + to_string(drews) + " turns from " +
                          to_string(getTurns()) + " turns\n"
+                         + "Draw rate:" + to_string((float) drews / getTurns() * 100) + "\n"
                          + _player1.getName() + " wins: " + to_string(_player1Wins) + " turns from " +
                          to_string(getTurns()) + " turns\n"
-                         + _player1.getName() + " win rate =:" + to_string((float) _player1Wins / getTurns() * 100) +
+                         + _player1.getName() + " win rate = " + to_string((float) _player1Wins / getTurns() * 100) +
                          "\n"
                          + _player2.getName() + " wins: " + to_string(_player2Wins) + " turns from " +
                          to_string(getTurns()) + " turns\n"
-                         + _player2.getName() + " win rate =:" + to_string((float) _player2Wins / getTurns() * 100)+"\n"
+                         + _player2.getName() + " win rate =" + to_string((float) _player2Wins / getTurns() * 100) +
+                         "\n"
                          + _player1.getName() + " total cards Won: " + to_string(_player1CardsWon) + "\n"
                          + _player2.getName() + " total cards Won: " + to_string(_player2CardsWon) + "\n";
     cout << statsString;
