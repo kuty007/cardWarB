@@ -45,7 +45,7 @@ public:
 
     int getPlayer2CardsWon();
 
-    std::string drewTurn(int totalCards, string log);
+    std::string drawTurn(int totalCards, string log);
 
 
 private:
@@ -53,7 +53,7 @@ private:
     Player &_player2;
     std::vector <Card> _cards;
     int _turns = 0;
-    int drews = 0;
+    int draws = 0;
     int _player1Wins = 0;
     int _player2Wins = 0;
     int _player1CardsWon = 0;
