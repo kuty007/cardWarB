@@ -3,6 +3,7 @@
 //
 #include <string>
 using namespace std;
+#pragma once
 #ifndef CARDWAR_A_CARD_H
 #define CARDWAR_A_CARD_H
 namespace ariel{

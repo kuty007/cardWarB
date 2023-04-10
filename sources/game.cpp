@@ -28,7 +28,6 @@ Game::Game(Player &player1, Player &player2) : _player1(player1), _player2(playe
     _player2.setCardsLeft(26);
     _player1.setIsPlaying(true);
     _player2.setIsPlaying(true);
-
 }
 
 void Game::printLastTurn() {
@@ -133,7 +132,7 @@ std::string Game::drewTurn(int totalCards, std::string log) {
         _player1.removeCard();
         _player2.removeCard();
         totalCards += 2;
-        Card card1 = _player1.getTopCard();
+        Card card1 = _player1.getTopCard();//
         Card card2 = _player2.getTopCard();
         totalCards += 2;
         if (card1.compare(card2) == 1) {
@@ -237,6 +236,8 @@ int Game::getPlayer1CardsWon() {
 int Game::getPlayer2CardsWon() {
     return _player2CardsWon;
 }
+
+
 
 
 

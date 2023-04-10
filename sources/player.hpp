@@ -1,6 +1,7 @@
 //
 // Created by asaf7 on 3/21/2023.
 //
+#pragma once
 #include "card.hpp"
 #include <vector>
 #include <string>
@@ -35,6 +36,7 @@ using namespace std;
         //get the top card from the player
         Card getTopCard();
         //get the card from the player
+        void restPlayer();
 
 
     private:

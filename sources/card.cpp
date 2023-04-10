@@ -46,7 +46,7 @@ int Card::compare(Card card) {
     } else {
         return 0;
     }
-    return 0;
+
 }
 
 

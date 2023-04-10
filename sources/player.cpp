@@ -110,6 +110,11 @@ Card Player::getTopCard() {
     _cards.pop_back();
     return card;
 }
+void Player::restPlayer() {
+    this->isPlaying = false;
+    this->cardsLeft = 0;
+    this->cardsWon = 0;
+}
 
 
 //
