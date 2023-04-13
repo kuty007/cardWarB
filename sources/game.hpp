@@ -1,6 +1,3 @@
-//
-// Created by asaf7 on 3/23/2023.
-//
 
 //
 // Created by asaf7 on 3/21/2023.
@@ -35,7 +32,7 @@ public:
 
     int getTurns();
 
-    int getDrews();
+    int getDraws();
 
     int getPlayer1Wins();
 

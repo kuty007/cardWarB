@@ -3,7 +3,6 @@
 //
 
 #include "player.hpp"
-#include "game.hpp"
 #include <iostream>
 #include <vector>
 #include <algorithm>

@@ -41,7 +41,7 @@ enum Value {
         void set_value(Value value);
         void set_suit(Suit suit);
         int compare(Card card);
-        //tosring
+        //tostring
         string toString();
 
     private:

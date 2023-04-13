@@ -19,19 +19,14 @@ Game::Game(Player &player1, Player &player2) : _player1(player1), _player2(playe
 //    if (&player1 == &player2) {
 //        throw std::invalid_argument("Players can't be the same");
 //check if players finished playing the game and rest them, so they can play again
-    if (player1.stacksize() == 0 && player1.getIsPlaying()) {
-        player1.restPlayer();
-    }
-    if (player2.stacksize() == 0 && player2.getIsPlaying()) {
-        player2.restPlayer();
-    }
-    try {
-        if (player1.getIsPlaying() || player2.getIsPlaying()) {
-            throw std::invalid_argument("One of the players is already playing");
-        }
-    } catch (std::invalid_argument &e) {
-        cout << e.what() << endl;
-        return;
+//    if (player1.stacksize() == 0 && player1.getIsPlaying()) {
+//        player1.restPlayer();
+//    }
+//    if (player2.stacksize() == 0 && player2.getIsPlaying()) {
+//        player2.restPlayer();
+//    }
+    if (player1.getIsPlaying() || player2.getIsPlaying()) {
+        throw std::invalid_argument("One of the players is already playing");
     }
     createCards();
     _player1.setCardsLeft(26);
@@ -39,6 +34,7 @@ Game::Game(Player &player1, Player &player2) : _player1(player1), _player2(playe
     _player1.setIsPlaying(true);
     _player2.setIsPlaying(true);
 }
+
 ///
 /// print the last turn
 void Game::printLastTurn() {
@@ -48,12 +44,13 @@ void Game::printLastTurn() {
     }
     cout << _log.back() << endl;
 }
+
 /// print the winner of the game
 void Game::printWiner() {
     string winner;
-    if (_player1.getCardsWon() > _player2.getCardsWon()) {
+    if (_player1CardsWon > _player2CardsWon) {
         winner = _player1.getName();
-    } else if (_player1.getCardsWon() < _player2.getCardsWon()) {
+    } else if (_player1CardsWon < _player2CardsWon) {
         winner = _player2.getName();
     } else {
         winner = "Draw!";
@@ -75,6 +72,7 @@ void Game::printLog() {
         cout << _log[static_cast<std::vector<int>::size_type>(i)] << endl;
     }
 }
+
 /// play the game
 void Game::playTurn() {
     if (_player1.stacksize() == 0 || _player2.stacksize() == 0) {
@@ -117,6 +115,7 @@ void Game::playTurn() {
         _log.push_back(log);
     }
 }
+
 ///handle the draw turn
 std::string Game::drawTurn(int totalCards, std::string log) {
 
@@ -126,6 +125,8 @@ std::string Game::drawTurn(int totalCards, std::string log) {
         //split the cards played in this turn between the players
         _player1.setCardsWon(_player1.getCardsWon() + (totalCards / 2));
         _player2.setCardsWon(_player2.getCardsWon() + (totalCards / 2));
+        _player1CardsWon += (totalCards / 2);
+        _player2CardsWon += (totalCards / 2);
         return log;
     }
     //check if one of the players has less than 2 cards left and if so you can't do a drew turn
@@ -138,6 +139,8 @@ std::string Game::drawTurn(int totalCards, std::string log) {
         //split the cards played in this turn between the players
         _player1.setCardsWon(_player1.getCardsWon() + (totalCards / 2));
         _player2.setCardsWon(_player2.getCardsWon() + (totalCards / 2));
+        _player1CardsWon += (totalCards / 2);
+        _player2CardsWon += (totalCards / 2);
         return log;
     }
     //dump card from each player and then play turn
@@ -184,6 +187,7 @@ void Game::playAll() {
         playTurn();
     }
 }
+
 ///print the stats of the game
 void Game::printStats() {
     string statsString = "Total turns: " + to_string(_turns) + "\n" +
@@ -203,6 +207,7 @@ void Game::printStats() {
     cout << statsString;
 
 }
+
 ///create the cards and shuffle them and then deal 26 cards to each player
 void Game::createCards() {
     for (int i = 0; i < 4; i++) {
@@ -231,7 +236,7 @@ int Game::getTurns() {
     return _turns;
 }
 
-int Game::getDrews() {
+int Game::getDraws() {
     return draws;
 }
 
